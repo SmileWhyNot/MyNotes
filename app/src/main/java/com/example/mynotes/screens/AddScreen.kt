@@ -1,5 +1,6 @@
 package com.example.mynotes.screens
 
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,20 +17,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.mynotes.MainViewModel
+import com.example.mynotes.MainViewModelFactory
+import com.example.mynotes.model.Note
 import com.example.mynotes.navigation.NavRoute
 import com.example.mynotes.ui.theme.MyNotesTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddScreen(navController: NavHostController) {
+fun AddScreen(navController: NavHostController, viewModel: MainViewModel) {
     var title by remember { mutableStateOf("") }
     var subtitle by remember { mutableStateOf("") }
+    var isButtonEnabled by remember { mutableStateOf(false) }
 
     Scaffold { paddingValues ->
         Column(
@@ -47,18 +54,29 @@ fun AddScreen(navController: NavHostController) {
             )
             OutlinedTextField(
                 value = title,
-                onValueChange = { title = it},
-                label = { Text(text = "Title") }
+                onValueChange = {
+                    title = it
+                    isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
+                },
+                label = { Text(text = "Title") },
+                isError = title.isEmpty()
             )
             OutlinedTextField(
                 value = subtitle,
-                onValueChange = { subtitle = it},
-                label = { Text(text = "SubTitle") }
+                onValueChange = {
+                    subtitle = it
+                    isButtonEnabled = title.isNotEmpty() && subtitle.isNotEmpty()
+                },
+                label = { Text(text = "SubTitle") },
+                isError = subtitle.isEmpty()
             )
             Button(
                 modifier = Modifier.padding(16.dp),
+                enabled = isButtonEnabled,
                 onClick = {
-                    navController.navigate(NavRoute.Main.route)
+                    viewModel.addNote(note = Note(title = title, subtitle = subtitle)) {
+                        navController.navigate(NavRoute.Main.route)
+                    }
                 }
             ) {
                 Text(text = "Add Note")
@@ -71,6 +89,10 @@ fun AddScreen(navController: NavHostController) {
 @Composable
 fun PrevAddScreen() {
     MyNotesTheme {
-        AddScreen(navController = rememberNavController())
+        val context = LocalContext.current
+        val mViewModel: MainViewModel =
+            viewModel(factory = MainViewModelFactory(context.applicationContext as Application))
+
+        AddScreen(navController = rememberNavController(), viewModel = mViewModel)
     }
 }
