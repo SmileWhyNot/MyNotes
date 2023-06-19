@@ -58,7 +58,6 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
     val notes = viewModel.readAllNotes().observeAsState(listOf()).value
     val note = notes.firstOrNull { it.id == noteId?.toInt() } ?: Note(title = NONE, subtitle = NONE)
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
-    var skipPartiallyExpanded by remember { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     val scope = rememberCoroutineScope()
     var title by remember { mutableStateOf(EMPTY) }
