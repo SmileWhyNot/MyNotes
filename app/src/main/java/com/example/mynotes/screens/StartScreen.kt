@@ -23,6 +23,9 @@ import com.example.mynotes.MainViewModel
 import com.example.mynotes.MainViewModelFactory
 import com.example.mynotes.navigation.NavRoute
 import com.example.mynotes.ui.theme.MyNotesTheme
+import com.example.mynotes.utils.Constants.Keys.LOCAL_SAVING
+import com.example.mynotes.utils.Constants.Keys.REMOTE_SAVING
+import com.example.mynotes.utils.Constants.Keys.WHAT_WILL_WE_USE
 import com.example.mynotes.utils.TYPE_FIREBASE
 import com.example.mynotes.utils.TYPE_ROOM
 
@@ -43,7 +46,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "What will we use?")
+            Text(text = WHAT_WILL_WE_USE)
             Button(
                 onClick = {
                     mViewModel.initDB(TYPE_ROOM) {
@@ -54,7 +57,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                     .width(200.dp)
                     .padding(vertical = 8.dp)
             ) {
-                Text(text = "Local DB")
+                Text(text = LOCAL_SAVING)
             }
             Button(
                 onClick = {
@@ -66,7 +69,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                     .width(200.dp)
                     .padding(vertical = 8.dp)
             ) {
-                Text(text = "Remote DB")
+                Text(text = REMOTE_SAVING)
             }
         }
     }
