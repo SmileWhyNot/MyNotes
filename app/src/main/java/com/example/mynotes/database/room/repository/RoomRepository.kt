@@ -24,4 +24,5 @@ class RoomRepository(private val noteRoomDao: NoteRoomDao) : DatabaseRepository 
         onSuccess()
     }
 
+    override fun sighOut() {}
 }
