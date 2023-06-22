@@ -41,6 +41,7 @@ import com.example.mynotes.utils.Constants
 import com.example.mynotes.utils.Constants.Keys.LOCAL_SAVING
 import com.example.mynotes.utils.Constants.Keys.REMOTE_SAVING
 import com.example.mynotes.utils.Constants.Keys.WHAT_WILL_WE_USE
+import com.example.mynotes.utils.DB_TYPE
 import com.example.mynotes.utils.EMAIL
 import com.example.mynotes.utils.PASSWORD
 import com.example.mynotes.utils.TYPE_FIREBASE
@@ -71,6 +72,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
             Button(
                 onClick = {
                     viewModel.initDB(TYPE_ROOM) {
+                        DB_TYPE = TYPE_ROOM
                         navController.navigate(route = NavRoute.Main.route)
                     }
                           },
@@ -132,6 +134,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                             EMAIL = email
                             PASSWORD = password
                             viewModel.initDB(TYPE_FIREBASE) {
+                                DB_TYPE = TYPE_FIREBASE
                                 navController.navigate(NavRoute.Main.route)
                             }
                         },

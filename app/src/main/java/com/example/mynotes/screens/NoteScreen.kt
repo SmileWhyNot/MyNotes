@@ -45,10 +45,15 @@ import com.example.mynotes.ui.theme.MyNotesTheme
 import com.example.mynotes.utils.Constants.Keys.DELETE
 import com.example.mynotes.utils.Constants.Keys.EDIT_NOTE
 import com.example.mynotes.utils.Constants.Keys.EMPTY
+import com.example.mynotes.utils.Constants.Keys.NAV_BACK
 import com.example.mynotes.utils.Constants.Keys.NONE
 import com.example.mynotes.utils.Constants.Keys.NOTE_SUBTITLE
 import com.example.mynotes.utils.Constants.Keys.NOTE_TITLE
 import com.example.mynotes.utils.Constants.Keys.UPDATE
+import com.example.mynotes.utils.DB_TYPE
+import com.example.mynotes.utils.TYPE_DATABASE
+import com.example.mynotes.utils.TYPE_FIREBASE
+import com.example.mynotes.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +61,15 @@ import kotlinx.coroutines.launch
 fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteId: String?) {
 
     val notes = viewModel.readAllNotes().observeAsState(listOf()).value
-    val note = notes.firstOrNull { it.id == noteId?.toInt() } ?: Note(title = NONE, subtitle = NONE)
+    val note = when (DB_TYPE) {
+        TYPE_ROOM -> {
+            notes.firstOrNull { it.id == noteId?.toInt() } ?: Note()
+        }
+        TYPE_FIREBASE ->{
+            notes.firstOrNull { it.firebaseId == noteId} ?: Note()
+        }
+        else -> Note()
+    }
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
     val scope = rememberCoroutineScope()
@@ -118,8 +131,10 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                 }
                 Button(
                     onClick = {
-                        viewModel.deleteNote(note =
-                        Note(id = note.id ,title = title, subtitle = subtitle)){
+                        viewModel.deleteNote(
+                            note =
+                            Note(id = note.id, title = title, subtitle = subtitle, firebaseId = note.firebaseId)
+                        ) {
                             navController.navigate(NavRoute.Main.route)
                         }
                     }
@@ -136,7 +151,7 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     navController.navigate(NavRoute.Main.route)
                 }
             ) {
-                Text(text = UPDATE)
+                Text(text = NAV_BACK)
             }
         }
 
@@ -146,7 +161,7 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet = false },
             sheetState = bottomSheetState
-        ){
+        ) {
             Surface {
                 Column(
                     modifier = Modifier
@@ -175,8 +190,8 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                         modifier = Modifier.padding(top = 16.dp),
                         onClick = {
                             viewModel.updateNote(
-                                note = Note(id = note.id, title = title, subtitle = subtitle)
-                            ){
+                                note = Note(id = note.id, title = title, subtitle = subtitle, firebaseId = note.firebaseId)
+                            ) {
                                 navController.navigate(NavRoute.Main.route)
                             }
                         }
@@ -191,7 +206,7 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
 
 @Composable
 @Preview(showBackground = true)
-fun PrevNoteScreen(){
+fun PrevNoteScreen() {
     MyNotesTheme {
         val context = LocalContext.current
         val mViewModel: MainViewModel =

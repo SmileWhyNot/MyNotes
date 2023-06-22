@@ -34,6 +34,10 @@ import com.example.mynotes.MainViewModelFactory
 import com.example.mynotes.model.Note
 import com.example.mynotes.navigation.NavRoute
 import com.example.mynotes.ui.theme.MyNotesTheme
+import com.example.mynotes.utils.Constants
+import com.example.mynotes.utils.DB_TYPE
+import com.example.mynotes.utils.TYPE_FIREBASE
+import com.example.mynotes.utils.TYPE_ROOM
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,12 +66,17 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
 @Composable
 fun NoteItem(note: Note, navController: NavHostController) {
+    val noteId = when(DB_TYPE) {
+        TYPE_FIREBASE -> note.firebaseId
+        TYPE_ROOM -> note.id
+        else -> Constants.Keys.EMPTY
+    }
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 10.dp, horizontal = 24.dp)
             .clickable {
-                navController.navigate(NavRoute.Note.route + "/${note.id}")
+                navController.navigate(NavRoute.Note.route + "/${noteId}")
             },
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp

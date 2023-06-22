@@ -35,11 +35,21 @@ class FirebaseRepository : DatabaseRepository {
     }
 
     override suspend fun update(note: Note, onSuccess: () -> Unit) {
-        TODO("Not yet implemented")
+        val noteId = note.firebaseId
+        val mapNotes = hashMapOf<String, Any>()
+
+        mapNotes[FIREBASE_ID] = noteId
+        mapNotes[NOTE_TITLE] = note.title
+        mapNotes[NOTE_SUBTITLE] = note.subtitle
+
+        database.child(noteId).updateChildren(mapNotes).addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { Log.d("CheckData", "Failed to update new Note") }
     }
 
     override suspend fun delete(note: Note, onSuccess: () -> Unit) {
-        TODO("Not yet implemented")
+        database.child(note.firebaseId).removeValue()
+            .addOnSuccessListener { onSuccess() }
+            .addOnFailureListener { Log.d("CheckData", "Failed to delete Note") }
     }
 
     override fun sighOut() {
@@ -48,8 +58,7 @@ class FirebaseRepository : DatabaseRepository {
 
     override fun connectToDatabase(onSuccess: () -> Unit, onFail: (String) -> Unit) {
         firebaseAuth.signInWithEmailAndPassword(EMAIL, PASSWORD)
-            .addOnSuccessListener { onSuccess() }
-            .addOnFailureListener {
+            .addOnSuccessListener { onSuccess() }.addOnFailureListener {
                 firebaseAuth.createUserWithEmailAndPassword(EMAIL, PASSWORD)
                     .addOnSuccessListener { onSuccess() }
                     .addOnFailureListener { onFail(it.message.toString()) }
