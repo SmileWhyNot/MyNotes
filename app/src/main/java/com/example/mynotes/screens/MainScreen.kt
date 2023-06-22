@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -39,7 +38,6 @@ import com.example.mynotes.utils.DB_TYPE
 import com.example.mynotes.utils.TYPE_FIREBASE
 import com.example.mynotes.utils.TYPE_ROOM
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
@@ -51,7 +49,11 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                 onClick = {
                     navController.navigate(NavRoute.Add.route)
                 }) {
-                    Icon(imageVector = Icons.Filled.Add, contentDescription = "Add Icon", tint = Color.Gray)
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Add Icon",
+                    tint = Color.Gray
+                )
             }
         }
     ) {
@@ -66,7 +68,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
 
 @Composable
 fun NoteItem(note: Note, navController: NavHostController) {
-    val noteId = when(DB_TYPE.value) {
+    val noteId = when (DB_TYPE.value) {
         TYPE_FIREBASE -> note.firebaseId
         TYPE_ROOM -> note.id
         else -> Constants.Keys.EMPTY

@@ -31,7 +31,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.mynotes.navigation.NavRoute
 import com.example.mynotes.navigation.NotesNavHost
 import com.example.mynotes.ui.theme.MyNotesTheme
-import com.example.mynotes.utils.Constants
 import com.example.mynotes.utils.DB_TYPE
 
 class MainActivity : ComponentActivity() {

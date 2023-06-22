@@ -1,7 +1,6 @@
 package com.example.mynotes.screens
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,7 +46,6 @@ import com.example.mynotes.utils.PASSWORD
 import com.example.mynotes.utils.TYPE_FIREBASE
 import com.example.mynotes.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
-import kotlin.math.log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +73,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                         DB_TYPE.value = TYPE_ROOM
                         navController.navigate(route = NavRoute.Main.route)
                     }
-                          },
+                },
                 modifier = Modifier
                     .width(200.dp)
                     .padding(vertical = 8.dp)
@@ -103,7 +101,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet = false },
             sheetState = bottomSheetState
-        ){
+        ) {
             Surface {
                 Column(
                     modifier = Modifier

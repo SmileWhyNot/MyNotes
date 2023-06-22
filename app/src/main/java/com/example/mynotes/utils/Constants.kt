@@ -3,7 +3,6 @@ package com.example.mynotes.utils
 import androidx.compose.runtime.mutableStateOf
 import com.example.mynotes.database.DatabaseRepository
 
-const val TYPE_DATABASE = "type_database"
 const val TYPE_ROOM = "type_room"
 const val TYPE_FIREBASE = "type_firebase"
 const val FIREBASE_ID = "firebaseId"
@@ -25,7 +24,6 @@ object Constants {
         const val LOCAL_SAVING = "Local saving"
         const val REMOTE_SAVING = "Remote saving"
         const val ID = "id"
-        const val NONE = "NONE"
         const val UPDATE = "Update"
         const val DELETE = "Delete"
         const val NAV_BACK = "NAV_BACK"

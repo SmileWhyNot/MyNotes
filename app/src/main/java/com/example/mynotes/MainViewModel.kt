@@ -3,7 +3,6 @@ package com.example.mynotes
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -23,19 +22,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application = a
 
     private val context = application
 
-    fun initDB(type: String, onSuccess: ()->Unit) {
+    fun initDB(type: String, onSuccess: () -> Unit) {
         Log.d("checkData", "MainViewModel initDB with $type")
-        when(type) {
+        when (type) {
             TYPE_ROOM -> {
                 val dao = AppRoomDatabase.getInstance(context = context).getRoomDao()
                 REPOSITORY = RoomRepository(dao)
                 onSuccess()
             }
+
             TYPE_FIREBASE -> {
                 REPOSITORY = FirebaseRepository()
                 REPOSITORY.connectToDatabase(
-                    {onSuccess()},
-                    { Log.d("checkData", "initDB: Failed to init")}
+                    { onSuccess() },
+                    { Log.d("checkData", "initDB: Failed to init") }
                 )
             }
         }
@@ -54,7 +54,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application = a
     fun updateNote(note: Note, onSuccess: () -> Unit) {
         viewModelScope.launch(Dispatchers.IO) {
             REPOSITORY.update(note = note) {
-                viewModelScope.launch(Dispatchers.Main){
+                viewModelScope.launch(Dispatchers.Main) {
                     onSuccess()
                 }
             }
@@ -62,9 +62,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application = a
     }
 
     fun deleteNote(note: Note, onSuccess: () -> Unit) {
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             REPOSITORY.delete(note = note) {
-                viewModelScope.launch(Dispatchers.Main){
+                viewModelScope.launch(Dispatchers.Main) {
                     onSuccess()
                 }
             }
@@ -82,7 +82,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application = a
                 onSuccess()
             }
 
-            else -> { Log.d("CheckData", "SignOut ELSE ${DB_TYPE.value}") }
+            else -> {
+                Log.d("CheckData", "SignOut ELSE ${DB_TYPE.value}")
+            }
         }
     }
 }

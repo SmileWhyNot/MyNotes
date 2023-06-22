@@ -10,13 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,12 +43,10 @@ import com.example.mynotes.utils.Constants.Keys.DELETE
 import com.example.mynotes.utils.Constants.Keys.EDIT_NOTE
 import com.example.mynotes.utils.Constants.Keys.EMPTY
 import com.example.mynotes.utils.Constants.Keys.NAV_BACK
-import com.example.mynotes.utils.Constants.Keys.NONE
 import com.example.mynotes.utils.Constants.Keys.NOTE_SUBTITLE
 import com.example.mynotes.utils.Constants.Keys.NOTE_TITLE
 import com.example.mynotes.utils.Constants.Keys.UPDATE
 import com.example.mynotes.utils.DB_TYPE
-import com.example.mynotes.utils.TYPE_DATABASE
 import com.example.mynotes.utils.TYPE_FIREBASE
 import com.example.mynotes.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
@@ -65,9 +60,11 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
         TYPE_ROOM -> {
             notes.firstOrNull { it.id == noteId?.toInt() } ?: Note()
         }
-        TYPE_FIREBASE ->{
-            notes.firstOrNull { it.firebaseId == noteId} ?: Note()
+
+        TYPE_FIREBASE -> {
+            notes.firstOrNull { it.firebaseId == noteId } ?: Note()
         }
+
         else -> Note()
     }
     var openBottomSheet by rememberSaveable { mutableStateOf(false) }
@@ -133,7 +130,12 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                     onClick = {
                         viewModel.deleteNote(
                             note =
-                            Note(id = note.id, title = title, subtitle = subtitle, firebaseId = note.firebaseId)
+                            Note(
+                                id = note.id,
+                                title = title,
+                                subtitle = subtitle,
+                                firebaseId = note.firebaseId
+                            )
                         ) {
                             navController.navigate(NavRoute.Main.route)
                         }
@@ -190,7 +192,12 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                         modifier = Modifier.padding(top = 16.dp),
                         onClick = {
                             viewModel.updateNote(
-                                note = Note(id = note.id, title = title, subtitle = subtitle, firebaseId = note.firebaseId)
+                                note = Note(
+                                    id = note.id,
+                                    title = title,
+                                    subtitle = subtitle,
+                                    firebaseId = note.firebaseId
+                                )
                             ) {
                                 navController.navigate(NavRoute.Main.route)
                             }
