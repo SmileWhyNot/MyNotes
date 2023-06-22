@@ -132,7 +132,7 @@ fun StartScreen(navController: NavHostController, viewModel: MainViewModel) {
                             EMAIL = email
                             PASSWORD = password
                             viewModel.initDB(TYPE_FIREBASE) {
-                                Log.d("checkData", "StartScreen: Auth Success")
+                                navController.navigate(NavRoute.Main.route)
                             }
                         },
                         enabled = email.isNotEmpty() && password.isNotEmpty()
